@@ -1,69 +1,77 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { Button } from "@/components/ui/button"
-import { GripVertical, X } from "lucide-react"
-import { Calendar, FileText, User } from "lucide-react"
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { GripVertical, X } from "lucide-react";
+import { Calendar, FileText, User } from "lucide-react";
 
 interface SortCriterion {
-  field: string
-  order: "asc" | "desc"
+  field: string;
+  order: "asc" | "desc";
 }
 
 interface SortPanelProps {
-  sortCriteria: SortCriterion[]
-  setSortCriteria: (criteria: SortCriterion[]) => void
-  onClose: () => void
+  sortCriteria: SortCriterion[];
+  setSortCriteria: (criteria: SortCriterion[]) => void;
+  onClose: () => void;
 }
 
 export function SortPanel({ sortCriteria, setSortCriteria, onClose }: SortPanelProps) {
-  const [localSortCriteria, setLocalSortCriteria] = useState<SortCriterion[]>(sortCriteria)
+  const [localSortCriteria, setLocalSortCriteria] = useState<SortCriterion[]>(sortCriteria);
 
+  // Toggle the sort order between "asc" and "desc"
   const toggleOrder = (index: number) => {
-    const newCriteria = [...localSortCriteria]
-    newCriteria[index].order = newCriteria[index].order === "asc" ? "desc" : "asc"
-    setLocalSortCriteria(newCriteria)
-  }
+    const newCriteria = [...localSortCriteria];
+    newCriteria[index].order = newCriteria[index].order === "asc" ? "desc" : "asc";
+    setLocalSortCriteria(newCriteria);
+  };
 
+  // Remove a specific criterion
   const removeCriterion = (index: number) => {
-    const newCriteria = [...localSortCriteria]
-    newCriteria.splice(index, 1)
-    setLocalSortCriteria(newCriteria)
-  }
+    const newCriteria = [...localSortCriteria];
+    newCriteria.splice(index, 1);
+    setLocalSortCriteria(newCriteria);
+  };
 
+  // Add a new criterion if it doesn't already exist
   const addCriterion = (field: string) => {
-    // Check if field already exists in criteria
     if (!localSortCriteria.some((c) => c.field === field)) {
-      setLocalSortCriteria([...localSortCriteria, { field, order: "asc" }])
+      setLocalSortCriteria([...localSortCriteria, { field, order: "asc" }]);
     }
-  }
+  };
 
+  // Clear all sorting criteria
   const clearAll = () => {
-    setLocalSortCriteria([])
-  }
+    setLocalSortCriteria([]);
+  };
 
+  // Apply the sort and pass the updated criteria back to the parent
   const applySort = () => {
-    setSortCriteria(localSortCriteria)
-    onClose()
-  }
+    setSortCriteria(localSortCriteria);
+    onClose();
+  };
 
-  // Available fields that can be added to sort
+  // Define the available fields for sorting
   const availableFields = [
     { name: "Client Name", icon: <User className="h-4 w-4 mr-2" /> },
     { name: "Created At", icon: <Calendar className="h-4 w-4 mr-2" /> },
     { name: "Updated At", icon: <Calendar className="h-4 w-4 mr-2" /> },
     { name: "Client ID", icon: <FileText className="h-4 w-4 mr-2" /> },
-  ]
+  ];
 
+  // Helper function to get the icon for a field
   const getIcon = (fieldName: string) => {
-    const field = availableFields.find((f) => f.name === fieldName)
-    return field ? field.icon : null
-  }
+    const field = availableFields.find((f) => f.name === fieldName);
+    return field ? field.icon : null;
+  };
 
   return (
     <div className="absolute right-0 top-0 z-10 w-[400px] bg-white rounded-lg shadow-lg border border-gray-200 p-4">
       <div className="flex justify-between items-center mb-4">
         <h3 className="font-bold text-lg">Sort By</h3>
+        <Button variant="ghost" size="icon" onClick={onClose}>
+          <X className="h-5 w-5" />
+        </Button>
       </div>
 
       <div className="space-y-4 mb-6">
@@ -154,5 +162,5 @@ export function SortPanel({ sortCriteria, setSortCriteria, onClose }: SortPanelP
         </Button>
       </div>
     </div>
-  )
+  );
 }

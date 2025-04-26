@@ -1,26 +1,105 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { Filter, Plus, Search } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { ClientTable } from "@/components/client-table"
-import { SortPanel } from "@/components/sort-panel"
+import { useState } from "react";
+import { Filter, Plus, Search } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { ClientTable } from "@/components/client-table";
+import { SortPanel } from "@/components/sort-panel";
+
+interface Client {
+  id: string;
+  name: string;
+  type: string;
+  email: string;
+  status: "active" | "inactive";
+  updatedBy: string;
+  updatedAt: string;
+  createdAt: string;
+}
+
+const mockClients: Client[] = [
+  {
+    id: "20",
+    name: "John Doe",
+    type: "Individual",
+    email: "johndoe@email.com",
+    status: "active",
+    updatedBy: "M",
+    updatedAt: "2025-04-26T12:00:00Z",
+    createdAt: "2025-01-01T10:00:00Z",
+  },
+  {
+    id: "21",
+    name: "Jane Smith",
+    type: "Individual",
+    email: "janesmith@email.com",
+    status: "active",
+    updatedBy: "A",
+    updatedAt: "2025-04-25T14:30:00Z",
+    createdAt: "2025-02-15T09:30:00Z",
+  },
+  {
+    id: "23",
+    name: "Michael Brown",
+    type: "Company",
+    email: "michaelbrown@email.com",
+    status: "inactive",
+    updatedBy: "M",
+    updatedAt: "2025-04-24T10:15:00Z",
+    createdAt: "2025-03-10T08:20:00Z",
+  },
+];
 
 export default function ClientDashboard() {
-  const [activeTab, setActiveTab] = useState("All")
-  const [showSortPanel, setShowSortPanel] = useState(false)
+  const [activeTab, setActiveTab] = useState("All");
+  const [showSortPanel, setShowSortPanel] = useState(false);
   const [sortCriteria, setSortCriteria] = useState([
     { field: "Client Name", order: "asc" },
     { field: "Created At", order: "desc" },
-  ])
+  ]);
+  const [clients, setClients] = useState(mockClients);
+
+  // Dynamic filtering based on activeTab
+  const filterClientsByTab = (tab: string) => {
+    if (tab === "All") return mockClients;
+    return mockClients.filter((client) => client.type === tab);
+  };
 
   const handleTabChange = (tab: string) => {
-    setActiveTab(tab)
-  }
+    setActiveTab(tab);
+    const filteredClients = filterClientsByTab(tab);
+    setClients(filteredClients); // Update clients state with filtered data
+  };
 
   const toggleSortPanel = () => {
-    setShowSortPanel(!showSortPanel)
-  }
+    setShowSortPanel(!showSortPanel);
+  };
+
+  const sortClients = (clients: Client[], criteria: typeof sortCriteria) => {
+    let sortedClients = [...clients];
+
+    criteria.forEach(({ field, order }) => {
+      sortedClients.sort((a, b) => {
+        const fieldA = a[field as keyof Client];
+        const fieldB = b[field as keyof Client];
+
+        if (fieldA && fieldB) {
+          if (fieldA > fieldB) return order === "asc" ? 1 : -1;
+          if (fieldA < fieldB) return order === "asc" ? -1 : 1;
+        }
+        return 0;
+      });
+    });
+
+    return sortedClients;
+  };
+
+  const handleSortApply = (criteria: typeof sortCriteria) => {
+    setSortCriteria(criteria);
+    const sortedData = sortClients(clients, criteria);
+    setClients(sortedData); // Update the clients state with sorted data
+    setShowSortPanel(false); // Close the sort panel
+  };
 
   return (
     <div className="container mx-auto px-4 py-6">
@@ -34,7 +113,9 @@ export default function ClientDashboard() {
             {["All", "Individual", "Company"].map((tab) => (
               <button
                 key={tab}
-                className={`py-4 px-1 ${activeTab === tab ? "font-bold border-b-2 border-black" : "text-gray-500"}`}
+                className={`py-4 px-1 ${
+                  activeTab === tab ? "font-bold border-b-2 border-black" : "text-gray-500"
+                }`}
                 onClick={() => handleTabChange(tab)}
               >
                 {tab}
@@ -62,16 +143,17 @@ export default function ClientDashboard() {
         </div>
 
         <div className="relative">
-          <ClientTable />
+          <ClientTable clients={clients} />
           {showSortPanel && (
             <SortPanel
+            // @ts-ignore
               sortCriteria={sortCriteria}
-              setSortCriteria={setSortCriteria}
+              setSortCriteria={handleSortApply} // Pass sorting handler
               onClose={() => setShowSortPanel(false)}
             />
           )}
         </div>
       </div>
     </div>
-  )
+  );
 }

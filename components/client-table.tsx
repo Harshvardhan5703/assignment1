@@ -14,41 +14,11 @@ interface Client {
   createdAt: string; // New field added
 }
 
-export function ClientTable() {
-  // Mock data for the table
-  const clients: Client[] = [
-    {
-      id: "20",
-      name: "John Doe",
-      type: "Individual",
-      email: "johndoe@email.com",
-      status: "active",
-      updatedBy: "M",
-      updatedAt: "2025-04-26T12:00:00Z", // Example updatedAt timestamp
-      createdAt: "2025-01-01T10:00:00Z", // Example createdAt timestamp
-    },
-    {
-      id: "21",
-      name: "Jane Smith",
-      type: "Individual",
-      email: "janesmith@email.com",
-      status: "active",
-      updatedBy: "A",
-      updatedAt: "2025-04-25T14:30:00Z",
-      createdAt: "2025-02-15T09:30:00Z", // Example createdAt timestamp
-    },
-    {
-      id: "23",
-      name: "Michael Brown",
-      type: "Individual",
-      email: "michaelbrown@email.com",
-      status: "inactive",
-      updatedBy: "M",
-      updatedAt: "2025-04-24T10:15:00Z",
-      createdAt: "2025-03-10T08:20:00Z", // Example createdAt timestamp
-    },
-  ];
+interface ClientTableProps {
+  clients: Client[]; // Accept clients data as a prop
+}
 
+export function ClientTable({ clients }: ClientTableProps) {
   return (
     <div className="rounded-lg border border-gray-200 shadow-sm overflow-hidden">
       <Table>
@@ -61,7 +31,7 @@ export function ClientTable() {
             <TableHead>Status</TableHead>
             <TableHead>Updated By</TableHead>
             <TableHead>Updated At</TableHead>
-            <TableHead>Created At</TableHead> {/* New column added */}
+            <TableHead>Created At</TableHead> {/* Column for Created At */}
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -87,7 +57,7 @@ export function ClientTable() {
               </TableCell>
               <TableCell>{client.updatedBy}</TableCell>
               <TableCell>{new Date(client.updatedAt).toLocaleString()}</TableCell>
-              <TableCell>{new Date(client.createdAt).toLocaleString()}</TableCell> {/* New field displayed */}
+              <TableCell>{new Date(client.createdAt).toLocaleString()}</TableCell>
             </TableRow>
           ))}
         </TableBody>
