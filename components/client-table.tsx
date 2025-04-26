@@ -23,27 +23,27 @@ export function ClientTable() {
       email: "johndoe@email.com",
       status: "active",
       updatedBy: "M",
-      updatedAt: "hello world",
+      updatedAt: "2025-04-26T12:00:00Z", // Example timestamp
     },
     {
       id: "21",
-      name: "Test Test",
+      name: "Jane Smith", // Updated name
       type: "Individual",
-      email: "test@test.com",
+      email: "janesmith@email.com", // Unique email
       status: "active",
-      updatedBy: "M",
-      updatedAt: "hello world",
+      updatedBy: "A", // UpdatedBy example
+      updatedAt: "2025-04-25T14:30:00Z", // Example timestamp
     },
     {
       id: "23",
-      name: "Teaser",
+      name: "Michael Brown", // Updated name
       type: "Individual",
-      email: "test@test.com",
-      status: "active",
+      email: "michaelbrown@email.com", // Unique email
+      status: "inactive", // Example status
       updatedBy: "M",
-      updatedAt: "hello world",
+      updatedAt: "2025-04-24T10:15:00Z", // Example timestamp
     },
-  ]
+  ];
 
   return (
     <div className="rounded-lg border border-gray-200 shadow-sm overflow-hidden">
@@ -81,7 +81,7 @@ export function ClientTable() {
                 </div>
               </TableCell>
               <TableCell>{client.updatedBy}</TableCell>
-              <TableCell>{client.updatedAt}</TableCell>
+              <TableCell>{new Date(client.updatedAt).toLocaleString()}</TableCell>
             </TableRow>
           ))}
         </TableBody>
