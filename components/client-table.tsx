@@ -1,16 +1,17 @@
-"use client"
+"use client";
 
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import Link from "next/link"
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import Link from "next/link";
 
 interface Client {
-  id: string
-  name: string
-  type: string
-  email: string
-  status: "active" | "inactive"
-  updatedBy: string
-  updatedAt: string
+  id: string;
+  name: string;
+  type: string;
+  email: string;
+  status: "active" | "inactive";
+  updatedBy: string;
+  updatedAt: string;
+  createdAt: string; // New field added
 }
 
 export function ClientTable() {
@@ -23,25 +24,28 @@ export function ClientTable() {
       email: "johndoe@email.com",
       status: "active",
       updatedBy: "M",
-      updatedAt: "2025-04-26T12:00:00Z", // Example timestamp
+      updatedAt: "2025-04-26T12:00:00Z", // Example updatedAt timestamp
+      createdAt: "2025-01-01T10:00:00Z", // Example createdAt timestamp
     },
     {
       id: "21",
-      name: "Jane Smith", // Updated name
+      name: "Jane Smith",
       type: "Individual",
-      email: "janesmith@email.com", // Unique email
+      email: "janesmith@email.com",
       status: "active",
-      updatedBy: "A", // UpdatedBy example
-      updatedAt: "2025-04-25T14:30:00Z", // Example timestamp
+      updatedBy: "A",
+      updatedAt: "2025-04-25T14:30:00Z",
+      createdAt: "2025-02-15T09:30:00Z", // Example createdAt timestamp
     },
     {
       id: "23",
-      name: "Michael Brown", // Updated name
+      name: "Michael Brown",
       type: "Individual",
-      email: "michaelbrown@email.com", // Unique email
-      status: "inactive", // Example status
+      email: "michaelbrown@email.com",
+      status: "inactive",
       updatedBy: "M",
-      updatedAt: "2025-04-24T10:15:00Z", // Example timestamp
+      updatedAt: "2025-04-24T10:15:00Z",
+      createdAt: "2025-03-10T08:20:00Z", // Example createdAt timestamp
     },
   ];
 
@@ -57,6 +61,7 @@ export function ClientTable() {
             <TableHead>Status</TableHead>
             <TableHead>Updated By</TableHead>
             <TableHead>Updated At</TableHead>
+            <TableHead>Created At</TableHead> {/* New column added */}
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -82,10 +87,11 @@ export function ClientTable() {
               </TableCell>
               <TableCell>{client.updatedBy}</TableCell>
               <TableCell>{new Date(client.updatedAt).toLocaleString()}</TableCell>
+              <TableCell>{new Date(client.createdAt).toLocaleString()}</TableCell> {/* New field displayed */}
             </TableRow>
           ))}
         </TableBody>
       </Table>
     </div>
-  )
+  );
 }
